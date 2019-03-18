@@ -1,0 +1,51 @@
+.jumbotron {
+    background: #EACB4E;
+    font-family: 'Margarine', cursive;
+}
+
+body {
+    background: purple;
+}
+
+.card {
+    font-family: 'Margarine', cursive;
+}
+
+.btn {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background: plum;
+}
+
+/* .card-img-left {
+    border-bottom-left-radius: calc(.25rem - 1px);
+    border-top-left-radius: calc(.25rem - 1px);
+    float: left;
+    padding-right: 1em;
+    margin-bottom: -1.25em;
+  }
+
+  .card-img-right {
+    border-bottom-left-radius: calc(.25rem - 1px);
+    border-top-left-radius: calc(.25rem - 1px);
+    float: right;
+    padding-right: 1em;
+    margin-bottom: -1.25em;
+  } 
+
+#player-1 {
+    display: flex;
+    float: left;
+    overflow: auto;
+    clear: both;
+}
+
+/* #player-2 {
+    display: flex;
+    float: right;
+    overflow: auto;
+    clear: both;
+} */ 

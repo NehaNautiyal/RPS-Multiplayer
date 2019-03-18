@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Multiplayer Rock, Paper, & Scissors Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap Stylesheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Margarine" rel="stylesheet">
+    <!-- My Stylesheet -->
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
+
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="jumbotron">
+            <h1 class="display-4 text-center">Play Rock / Paper / Scissors !</h1>
+            <p class="lead text-center">2-player game</p>
+            <hr class="my-4 text-center">
+            <p class="text-center mb-0">Ready, set, go!</p>
+            <p class="text-center mb-0" id="viewers"></p>
+
+            <!-- <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a> -->
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card mb-3 card-img-right player-1" id="player-1">
+                        <div class="card-body">
+                            <h5 class="card-title">Player 1</h5>
+                            <h4 class="connection" id="player-1-connection">Not Connected</h4>
+                            <p class="card-text">Choose one:</p>
+                            <button type="button" class="btn btn-primary btn-sm player-1-choice" value="rock">Rock</button>
+                            <button type="button" class="btn btn-primary btn-sm player-1-choice" value="paper">Paper</button>
+                            <button type="button" class="btn btn-primary btn-sm player-1-choice" value="scissors">Scissors</button>
+                            <p class="card-text"><small class="text-muted" id="player-1-choice-text"></small></p>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                    <img id="player-1-img" src="" class="player-1" alt="">
+            </div>
+            <div id="result"></div>
+            <div class="col-md-3">
+                    <img id="player-2-img" src="" class="player-2" alt="">
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-3 card-img-left" id="player-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Player 2</h5>
+                            <h4 class="connection" id="player-2-connection">Not Connected</h4>
+                            <p class="card-text">Choose one:</p>
+                            <button type="button" class="btn btn-primary btn-sm player-2-choice" value="rock">Rock</button>
+                            <button type="button" class="btn btn-primary btn-sm player-2-choice" value="paper">Paper</button>
+                            <button type="button" class="btn btn-primary btn-sm player-2-choice" value="scissors">Scissors</button>
+                            <p class="card-text"><small class="text-muted" id="player-2-choice-text"></small></p>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Firebase Reference -->
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <!-- My Javascript Reference -->
+    <script src="assets/javascript/app.js"></script>
+</body>
+
+</html>
