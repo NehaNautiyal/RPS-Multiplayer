@@ -20,6 +20,16 @@ body {
     background: plum;
 }
 
+#result {
+    color: white;
+    text-align: center;
+    font-family: 'Margarine', cursive;
+}
+
+#player-1-stats, #player-2-stats {
+    color: purple;
+}
+
 /* .card-img-left {
     border-bottom-left-radius: calc(.25rem - 1px);
     border-top-left-radius: calc(.25rem - 1px);
