@@ -21,9 +21,9 @@
 
         <div class="jumbotron">
             <h1 class="display-4 text-center">Play Rock / Paper / Scissors !</h1>
-            <p class="lead text-center">2-player game</p>
+            <p class="lead text-center">A 2-player game to test your RPS skills. Ready, set, go!</p>
             <hr class="my-4 text-center">
-            <p class="text-center mb-0">Ready, set, go!</p>
+            <p class="text-center mb-0" id="chat-message"></p>
             <p class="text-center mb-0" id="viewers"></p>
 
             <!-- <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a> -->
@@ -37,7 +37,7 @@
             <div class="col-md-3">
                 <div class="card mb-3 card-img-right player-1" id="player-1">
                         <div class="card-body">
-                            <h5 class="card-title">Player 1</h5>
+                            <h5 class="card-title" id="player-1-name">Player 1</h5>
                             <h4 class="connection" id="player-1-connection">Not Connected</h4>
                             <p class="card-text" id="player-1-choose-text">Choose one:</p>
                             <button type="button" class="btn btn-primary btn-sm player-1-choice" value="rock" data-src="assets/images/rock.png">Rock</button>
@@ -57,7 +57,7 @@
             <div class="col-md-3">
                 <div class="card mb-3 card-img-left" id="player-2">
                         <div class="card-body">
-                            <h5 class="card-title">Player 2</h5>
+                            <h5 class="card-title" id="player-2-name">Player 2</h5>
                             <h4 class="connection" id="player-2-connection">Not Connected</h4>
                             <p class="card-text" id="player-2-choose-text">Choose one:</p>
                             <button type="button" class="btn btn-primary btn-sm player-2-choice" value="rock" data-src="assets/images/rock.png">Rock</button>
