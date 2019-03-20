@@ -71,6 +71,9 @@ $(document).ready(function () {
             player1connected = true;
             player2connected = false;
 
+            //Don't want Player 1 to be 
+            $("#player-2-choose-text, .player-2-choice").hide();
+
         } else if (snap.numChildren() === 2) {
 
             //This is displaying on Player 1's window once the second person connects...
@@ -85,6 +88,9 @@ $(document).ready(function () {
             $("#player-2-connection").text("Connected!").css("color", "green");
             player1connected = true;
             player2connected = true;
+
+            //Don't want Player 2 to be able to choose for Player 1
+            // $("#player-1-choose-text, .player-1-choice").hide();
 
         } else if (snap.numChildren() > 2) {
             $("#player-1-connection").text("Connected!").css("color", "green");
@@ -140,8 +146,8 @@ $(document).ready(function () {
     var paperImgSrc = "assets/images/paper.png";
     var scissorsImgSrc = "assets/images/scissors.png";
 
-    var player1Picked = false;
-    var player2Picked = false;
+    var player1Picked;
+    var player2Picked;
 
     var player1Choice;
     var player2Choice;
@@ -276,16 +282,26 @@ $(document).ready(function () {
         console.log(`Player1Choice in firebase: ${player1Choice}`);
         console.log(`Player2Choice in firebase: ${player2Choice}`);
 
-        //logic of game depending on if a choice is picked 
 
-        //NEED TO CONSOLE LOG THIS TO BE TRUE WHEN CLICKED ON A CHOICE- NOT WORKING!!!!
-        console.log(`Player 1 Choice exists: ${snapshot.child("playerChoices/player1choice").exists()}`);
-        console.log(`Player 2 Choice exists: ${snapshot.child("playerChoices/player2choice").exists()}`);
-        
-        // if (snapshot.child("player1Choice").exists() && snapshot.child("player2choice").exists()) {
-        // playRPS(player1Choice, player2Choice);
-        // showImages(player1ChoiceImgSrc, player2ChoiceImgSrc);
-        // } 
+        console.log(`Player 1 Choice has child: ${snapshot.hasChild("player1Choice")}`);
+        console.log(`Player 2 Choice haschild: ${snapshot.hasChild("player2Choice")}`);
+
+        player1Picked = snapshot.hasChild("player1Choice"); //boolean
+        player2Picked = snapshot.hasChild("player2Choice"); //boolean
+
+        console.log(player1Picked);
+        console.log(player2Picked);
+
+        if (player2Picked && !player1Picked) {
+            $("#player-2-choose-text").text("Waiting for Player 1 to choose...");
+        } else if (player1Picked && !player2Picked) {
+            $("#player-1-choose-text").text("Waiting for Player 2 to choose...");
+        } else if (player1Picked && player2Picked) {
+            playRPS(player1Choice, player2Choice);
+            showImages(player1ChoiceImgSrc, player2ChoiceImgSrc);
+            $("#player-2-choose-text, #player-1-choose-text").text("The results are in!");
+            setTimeout(reset, 1000 * 3);
+        }
 
         database.ref("/playerChoices").onDisconnect().remove();
 
