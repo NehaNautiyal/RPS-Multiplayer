@@ -24,7 +24,7 @@ button:hover {
 }
 
 .btn-primary {
-    background: purple;
+    background: orchid;
     color: whitesmoke;
 
 }
@@ -46,9 +46,11 @@ button:hover {
     font-family: 'Margarine', cursive;
 }
 
-#player-1-stats, #player-2-stats, #player-1-name, #player-2-name, #player-1-choose-text, #player-2-choose-text, #player-1-connection, #player-2-connection {
-    color: plum;
+#player-1-name, #player-2-name, #player-1-choose-text, #player-2-choose-text, #player-1-connection, #player-2-connection {
+    color: whitesmoke;
 }
-#player-1-connection, #player-2-connection {
-    background: #EACB4E;
+
+#player-1-stats, #player-2-stats {
+    color: purple;
 }
+ 
