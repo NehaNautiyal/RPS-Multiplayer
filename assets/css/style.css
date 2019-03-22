@@ -20,6 +20,17 @@ body {
     background: plum;
 }
 
+#player-name-input {
+    /* overflow: auto;
+    clear: both; */
+    width: 80%;
+}
+
+#join-game {
+    margin-left: 0 auto;
+    margin-right: 0 auto;
+}
+
 #result {
     color: white;
     text-align: center;
