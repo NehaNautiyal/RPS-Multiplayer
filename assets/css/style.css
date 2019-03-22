@@ -9,15 +9,24 @@ body {
 
 .card {
     font-family: 'Margarine', cursive;
+    background: teal;
 }
 
-.btn {
+button {
     display: flex;
     flex-wrap: wrap;
 }
 
+button:hover {
+    background: #EACB4E;
+    color: black;
+
+}
+
 .btn-primary {
-    background: plum;
+    background: purple;
+    color: whitesmoke;
+
 }
 
 #player-name-input {
@@ -32,41 +41,14 @@ body {
 }
 
 #result {
-    color: white;
+    color: purple;
     text-align: center;
     font-family: 'Margarine', cursive;
 }
 
-#player-1-stats, #player-2-stats {
-    color: purple;
+#player-1-stats, #player-2-stats, #player-1-name, #player-2-name, #player-1-choose-text, #player-2-choose-text, #player-1-connection, #player-2-connection {
+    color: plum;
 }
-
-/* .card-img-left {
-    border-bottom-left-radius: calc(.25rem - 1px);
-    border-top-left-radius: calc(.25rem - 1px);
-    float: left;
-    padding-right: 1em;
-    margin-bottom: -1.25em;
-  }
-
-  .card-img-right {
-    border-bottom-left-radius: calc(.25rem - 1px);
-    border-top-left-radius: calc(.25rem - 1px);
-    float: right;
-    padding-right: 1em;
-    margin-bottom: -1.25em;
-  } 
-
-#player-1 {
-    display: flex;
-    float: left;
-    overflow: auto;
-    clear: both;
+#player-1-connection, #player-2-connection {
+    background: #EACB4E;
 }
-
-/* #player-2 {
-    display: flex;
-    float: right;
-    overflow: auto;
-    clear: both;
-} */ 

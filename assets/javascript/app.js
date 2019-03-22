@@ -1,5 +1,9 @@
 $(document).ready(function () {
 
+    $(function () {
+        $("form").submit(function () { return false; });
+    });
+
     // Initialize some variables
     var userId;
     var profile;
@@ -82,8 +86,6 @@ $(document).ready(function () {
             // Remove user from the connection list when they disconnect, along with all of their data
             connectionsRef.onDisconnect().remove();
             usersRef.onDisconnect().remove();
-            // stateRef.onDisconnect().remove();
-
         }
     });
 
@@ -115,35 +117,20 @@ $(document).ready(function () {
 
             // Need to update HTML that someone disconnected and all data has been reset. Need to enter name and play again
             $("#result").show().text("Someone got disconnected! You might need to refresh your browser to re-enter your name to play.");
-            $("#player-1-name").text("Player 1");
-            $("#player-2-name").text("Player 2");
+            $("#player-1-name").text('Type name & Click "Join Game"');
+            $("#player-2-name").text('Type name & Click "Join Game"');
             $("#player-1-choose-text, #player-2-choose-text").text("Choose one:");
         }
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
 
-    // stateRef.on("value", function (s) {
-    //     // If there is a value there, can anything be done
-    //     if (s.val()) {
-    //         // Evaluate which values are present
-    //         // If there are no player values 
-
-    //         // If there are player 1 values but no player 2 values
-
-    //         // If there are player 2 values but no player 1 values
-
-    //         // If there are both player 1 and player 2 values
-
-    //     }
-
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // });
-
+    // When a name is typed and "Join Game" is clicked
     $("#player-join-game").on("click", function (e) {
         e.preventDefault();
+        $("#result").text("");
         var name = $("#player-name-input").val().trim();
+        console.log(userId);
         // If the game has not started, there is no player 1 and the userId is not the same as player 2
         if (!state.playing && !state.player1.name && userId !== state.player2.id) {
             //Update this in the database as player 1
@@ -259,12 +246,12 @@ $(document).ready(function () {
 
 
     stateRef.on("value", function (snap) {
-        
+
         stateFb = snap.val();
-        
+
         if (!stateFb.playing) {
             if (stateFb.player1.name && !stateFb.player2.name) {
-                $("#player-1-connection").text("Connected!").css("color", "green");
+                $("#player-1-connection").text("Connected!").css("color", "yellowgreen");
                 $("#player-2-connection").text("Waiting for another player...").css("color", "red");
                 player1connected = true;
                 player2connected = false;
@@ -275,7 +262,7 @@ $(document).ready(function () {
                 }
             } else if (stateFb.player2.name && !stateFb.player1.name) {
                 $("#player-1-connection").text("Waiting for another player...").css("color", "red");
-                $("#player-2-connection").text("Connected!").css("color", "green");
+                $("#player-2-connection").text("Connected!").css("color", "yellowgreen");
                 player1connected = false;
                 player2connected = true;
                 $("#player-2-name").text(stateFb.player2.name);
@@ -286,7 +273,7 @@ $(document).ready(function () {
             }
         } else if (stateFb.playing) {
             if (stateFb.player2.name && stateFb.player1.name) {
-                $("#player-1-connection, #player-2-connection").text("Connected!").css("color", "green");
+                $("#player-1-connection, #player-2-connection").text("Connected!").css("color", "yellowgreen");
                 player1connected = true;
                 player2connected = true;
                 $("#player-1-name").text(stateFb.player1.name);
@@ -294,6 +281,7 @@ $(document).ready(function () {
                 state = stateFb;
                 if (userId === stateFb.player1.id) {
                     $("#player-2-choose-text, .player-2-choice").hide();
+                    $("#player-1-choose-text").text("Now it is your turn to choose.");
                 } else if (userId === stateFb.player2.id) {
                     if (!stateFb.player1.choice && !stateFb.player2.choice) {
                         $("#player-2-choose-text").text("Please wait until " + stateFb.player1.name + " chooses.");
@@ -431,36 +419,6 @@ $(document).ready(function () {
         }
     });
 
-
-
-    // function renderHtml() {
-    //     if (state.player1.name && !state.player2.name) {
-    //         $("#player-1-connection").text("Connected!").css("color", "green");
-    //         $("#player-2-connection").text("Waiting for another player...").css("color", "red");
-    //         player1connected = true;
-    //         player2connected = false;
-    //         $("#player-1-name").text(state.player1.name);
-    //         console.log(`Player 2 name in local state ${state.player2.name}`);
-    //     } else if (state.player2.name && !state.player1.name) {
-    //         $("#player-1-connection").text("Waiting for another player...").css("color", "red");
-    //         $("#player-2-connection").text("Connected!").css("color", "green");
-    //         player1connected = false;
-    //         player2connected = true;
-    //         $("#player-2-name").text(state.player2.name);
-    //         console.log(`Player 2 name in local state ${state.player2.name}`);
-    //     } else if (state.player2.name && state.player1.name) {
-    //         $("#player-1-connection").css("color", "green").text("Connected!");
-    //         $("#player-2-connection").text("Connected!").css("color", "green");
-    //         player1connected = true;
-    //         player2connected = true;
-    //         $("#player-1-name").text(state.player1.name);
-    //         $("#player-2-name").text(state.player2.name);
-    //     }
-    // }
-
-    //check to see if player1 can leave the game and empty the name
-
-
     //get rid of numbers 
     //build object
     //only defined user can see it's own update
@@ -469,14 +427,6 @@ $(document).ready(function () {
     //other side will be blank
     //bracket notation is key
 
-    // //Don't want Player 1 to be 
-    // $("#player-2-choose-text, .player-2-choice").hide();
-
-    // } else if (snap.numChildren() === 2) {
-
-    //     //Don't want Player 2 to be able to choose for Player 1
-    //     //Player 1 needs to be able to choose first, but what if Player 2 connects? 
-    //     // $("#player-1-choose-text, .player-1-choice").hide();
 
     // } else if (snap.numChildren() > 2) {
     //     $("#player-1-connection, #player-2-connection").text("Connected!").css("color", "green");
@@ -484,66 +434,24 @@ $(document).ready(function () {
     //     player2connected = true;
     //     $("#viewers").text(`There are ${snap.numChildren()} viewers in the audience.`);
 
-    // } else if (snap.numChildren() <= 0) {
-    //     player1connected = false;
-    //     player2connected = false;
-    //     $("#player-1-connection, #player-2-connection").text("Waiting for another player to connect.").css("color", "red");
-
-    // }
-    // });
-
-    // database.ref("/playerNames").on("child_added", function (snapshot) {
-
-    //     player1Name = snapshot.val().player1Name;
-    //     player2Name = snapshot.val().player2Name;
-
-    //     console.log(`Player 1 Name: ${player1Name} and Player 2 Name: ${player2Name}`);
 
 
+    function sendChatMessage() {
+        ref = firebase.database().ref("/chat");
+        messageField = document.querySelector("#chat-message");
 
-    //     database.ref("/playerNames").onDisconnect().remove();
+        ref.push().set({
+            name: displayName,
+            message: messageField.value
+        });
+    }
 
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // });
+    ref = firebase.database().ref("/chat");
 
-    // function sendChatMessage() {
-    //     ref = firebase.database().ref("/chat");
-    //     messageField = document.querySelector("#chat-message");
-
-    //     ref.push().set({
-    //         name: displayName,
-    //         message: messageField.value
-    //     });
-    // }
-
-    // ref = firebase.database().ref("/chat");
-
-    // ref.on("child_added", function (snapshot) {
-    //     var message = snapshot.val();
-    //     addChatMessage(message.name, message.message);
-    // });
-
-
-    //Initialize variables
-    var rockImgSrc = "assets/images/rock.png";
-    var paperImgSrc = "assets/images/paper.png";
-    var scissorsImgSrc = "assets/images/scissors.png";
-
-    // var player1Picked;
-    // var player2Picked;
-
-    // var player1Choice;
-    // var player2Choice;
-    // var player1ChoiceImgSrc;
-    // var player2ChoiceImgSrc;
-
-    // //Scoreboard variables
-    // var numTies = 0;
-    // var numWinsPlayer1 = 0;
-    // var numLossesPlayer1 = 0;
-    // var numWinsPlayer2 = 0;
-    // var numLossesPlayer2 = 0;
+    ref.on("child_added", function (snapshot) {
+        var message = snapshot.val();
+        addChatMessage(message.name, message.message);
+    });
 
     //Function to reset 
     function reset() {
@@ -606,82 +514,53 @@ $(document).ready(function () {
         $("#player-1-img, #player-2-img").hide();
     }
 
-    //function to evaluate the choices & display the result:
-    // function playRPS(player1Choice, player2Choice) {
-    //     if (player1Choice === player2Choice) {
-
-
-    //         numTies++;
-    //         $("#result").show().html('<h2>It\'s a tie!</h2>');
-    //     } else if (player1Choice === "rock" && player2Choice === "scissors" ||
-    //         player1Choice === "scissors" && player2Choice === "paper" ||
-    //         player1Choice === "paper" && player2Choice === "rock") {
-    //         numWinsPlayer1++;
-    //         numLossesPlayer2++;
-    //         $("#result").show().html('<h2>Player 1 wins!</h2>');
-    //     } else if (player1Choice === "rock" && player2Choice === "paper" ||
-    //         player1Choice === "scissors" && player2Choice === "rock" ||
-    //         player1Choice === "paper" && player2Choice === "scissors") {
-    //         numWinsPlayer2++;
-    //         numLossesPlayer1++;
-    //         $("#result").show().html('<h2>Player 2 wins!</h2>');
-    //     }
-    // }
-
-    // //Function to show the images & update stats (only when both players have picked their choices)
-    // function showImages(player1ChoiceImgSrc, player2ChoiceImgSrc) {
-    //     $("#player-1-img, #player-2-img").show();
-    //     $("#player-1-img").attr("src", player1ChoiceImgSrc);
-    //     $("#player-2-img").attr("src", player2ChoiceImgSrc);
-    //     $("#player-1-stats").text(`Wins: ${state.player1.wins} | Losses: ${state.player1.losses} | Ties: ${state.ties}`);
-    //     $("#player-2-stats").text(`Wins: ${state.player2.wins} | Losses: ${state.player2.losses} | Ties: ${state.ties}`);
-    // }
-
     //When Player 1 clicks a choice
     $(".player-1-choice").on("click", function () {
         //Nothing can happen if it's not Player 1
         if (userId === state.player1.id) {
             //And it has to be Player 1's turn
             if (state.player1.turn) {
+                if (state.player2.name) {
+                    //hide the choices
+                    $(".player-1-choice").hide();
+                    //get the value of that choice & the src of that img
+                    player1Choice = $(this).val();
+                    player1ChoiceImgSrc = $(this).attr("data-src");
+                    console.log(`Player 1 Choice: ${player1Choice} & imgSrc: ${player1ChoiceImgSrc}`);
 
-                //hide the choices
-                $(".player-1-choice").hide();
-                //get the value of that choice & the src of that img
-                player1Choice = $(this).val();
-                player1ChoiceImgSrc = $(this).attr("data-src");
-                console.log(`Player 1 Choice: ${player1Choice} & imgSrc: ${player1ChoiceImgSrc}`);
+                    // Update the database
+                    stateRef.update({
+                        player1: {
+                            id: state.player1.id,
+                            name: state.player1.name,
+                            choice: player1Choice,
+                            img: player1ChoiceImgSrc,
+                            turn: false,
+                            wins: state.player1.wins,
+                            losses: state.player1.losses
+                        },
+                        player2: {
+                            id: state.player2.id,
+                            name: state.player2.name,
+                            choice: "",
+                            img: "",
+                            turn: true,
+                            wins: state.player2.wins,
+                            losses: state.player2.losses
+                        },
+                        ties: 0,
+                        playing: true
+                    });
 
-                // Update the database
-                stateRef.update({
-                    player1: {
-                        id: state.player1.id,
-                        name: state.player1.name,
-                        choice: player1Choice,
-                        img: player1ChoiceImgSrc,
-                        turn: false,
-                        wins: state.player1.wins,
-                        losses: state.player1.losses
-                    },
-                    player2: {
-                        id: state.player2.id,
-                        name: state.player2.name,
-                        choice: "",
-                        img: "",
-                        turn: true,
-                        wins: state.player2.wins,
-                        losses: state.player2.losses
-                    },
-                    ties: 0,
-                    playing: true
-                });
-
-                //Update the local state with these values
-                state.player1.choice = player1Choice;
-                state.player1.img = player1ChoiceImgSrc;
-                state.player2.turn = true;
-                $("#player-1-choose-text").text("Waiting for " + state.player2.name + " to choose");
-                $("#player-2-choose-text").text("Now it's your turn.");
-
+                    //Update the local state with these values
+                    state.player1.choice = player1Choice;
+                    state.player1.img = player1ChoiceImgSrc;
+                    state.player2.turn = true;
+                    $("#player-1-choose-text").text("Waiting for " + state.player2.name + " to choose");
+                    $("#player-2-choose-text").text("Now it's your turn.");
+                } else {
+                    $("#player-1-choose-text").text("Waiting for another player to join the game.");
+                }
             } else {
 
                 //Show that it is not Player 1's turn yet
@@ -725,34 +604,11 @@ $(document).ready(function () {
                 });
 
                 //Update the local state with these values 
-                //THIS IS NOT WORKING, NOT UPDATING THE LOCAL VARIABLES
                 state.player2.choice = player2Choice;
                 state.player2.img = player2ChoiceImgSrc;
                 state.player1.turn = false;
                 state.player2.turn = false;
 
-                // if (player2connected && player1connected) {
-                //     console.log(player1Picked, player2Picked);
-                //     //if neither player has picked and player 1 clicked a choice
-                //     if (!player2Picked && !player1Picked) {
-                //         player2Picked = true;
-                //         $("#player-2-choose-text").text("Waiting for Player 1 to choose...");
-                //         console.log(player1Picked, player2Picked);
-                //     } else if (player2Picked && !player1Picked) {
-                //         $("#player-2-choose-text").text("Waiting for Player 1 to choose...");
-                //         alert("You already picked your choice.");
-                //         console.log(player1Picked, player2Picked);
-                //     } else if (!player2Picked && player1Picked) {
-                //         player2Picked = true;
-                //         $("#player-2-choose-text, #player-1-choose-text").text("The results are in!");
-                //         console.log(player1Picked, player2Picked);
-                //         playRPS(player1Choice, player2Choice);
-                //         showImages(player1ChoiceImgSrc, player2ChoiceImgSrc);
-                //         setTimeout(reset, 1000 * 2);
-                //     }
-                // } else if (player1connected && !player2connected) {
-                //     $("#player-2-choose-text").text("Waiting for Player 1 to connect...");
-                // }
             } else {
                 $("#player-2-choose-text").text("It is not your turn yet.");
             }
@@ -760,129 +616,4 @@ $(document).ready(function () {
             $("#player-2-choose-text").text("You are not player 2!");
         }
     });
-
-    // database.ref("/playerChoices").on("child_added", function (snapshot) {
-
-    //     player1Choice = snapshot.val().player1Choice;
-    //     player1ChoiceImgSrc = snapshot.val().player1ChoiceImgSrc;
-    //     player2Choice = snapshot.val().player2Choice;
-    //     player2ChoiceImgSrc = snapshot.val().player2ChoiceImgSrc;
-
-    //     console.log(`Player 1 Choice: ${player1Choice} and Player 2 Choice: ${player2Choice}`);
-    //     console.log(`Player1Choice in firebase: ${player1Choice}`);
-    //     console.log(`Player2Choice in firebase: ${player2Choice}`);
-
-
-    //     console.log(`Player 1 Choice has child: ${snapshot.hasChild("player1Choice")}`);
-    //     console.log(`Player 2 Choice haschild: ${snapshot.hasChild("player2Choice")}`);
-
-    //     player1Picked = snapshot.hasChild("player1Choice"); //boolean
-    //     player2Picked = snapshot.hasChild("player2Choice"); //boolean
-
-    //     console.log(player1Picked);
-    //     console.log(player2Picked);
-
-    //     if (player2Picked && !player1Picked) {
-    //         $("#player-2-choose-text").text("Waiting for Player 1 to choose...");
-    //     } else if (player1Picked && !player2Picked) {
-    //         $("#player-1-choose-text").text("Waiting for Player 2 to choose...");
-    //     } else if (player1Picked && player2Picked) {
-    //         playRPS(player1Choice, player2Choice);
-    //         showImages(player1ChoiceImgSrc, player2ChoiceImgSrc);
-    //         $("#player-2-choose-text, #player-1-choose-text").text("The results are in!");
-    //         setTimeout(reset, 1000 * 3);
-    //     }
-
-    //     database.ref("/playerChoices").onDisconnect().remove();
-
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // });
-
-    // // //When player 2 picks their choice
-    // // $(".player-2-choice").on("click", function () {
-    // //     $(".player-2-choice").hide();
-    // //     player2Choice = $(this).val();
-    // //     console.log(`Player 2 picked: ${player2Choice}`);
-
-    // //     if (player2connected) {
-    // //         if (!player1Picked && !player2Picked) {
-    // //             player2Picked = true;
-    // //             if (player2Choice === "paper") {
-    // //                 // $("#player-2-img").attr("src", paperImgSrc);
-
-    // //                 //Save this choice in the database
-    // //                 // database.ref("/player2").set({
-    // //                 //     player2Choice: player2Choice,
-    // //                 //     player2ChoiceImgSrc: paperImgSrc
-    // //                 // });
-
-    // //                 // $("#player-2-choice-text").append(`You picked: ${player2Choice}`);
-    // //             } else if (player2Choice === "rock") {
-    // //                 // $("#player-2-img").attr("src", rockImgSrc);
-
-    // //                 //Save this choice in the database
-    // //                 // database.ref("/player2").set({
-    // //                 //     player2Choice: player2Choice,
-    // //                 //     player2ChoiceImgSrc: rockImgSrc
-    // //                 // });
-
-    // //                 // $("#player-2-choice-text").append(`You picked: ${player2Choice}`);
-    // //             } else if (player2Choice === "scissors") {
-    // //                 // $("#player-2-img").attr("src", scissorsImgSrc);
-
-    // //                 //Save this choice in the database
-    // //                 // database.ref("/player2").set({
-    // //                 //     player2Choice: player2Choice,
-    // //                 //     player2ChoiceImgSrc: scissorsImgSrc
-    // //                 // });
-
-    // //                 // $("#player-1-choice-text").append(`You picked: ${player2Choice}`);
-    // //             }
-    // //             $("#player-2-choose-text").text("Waiting for Player 1 to choose...");
-    // //         } else {
-    // //             alert("You already picked your choice.")
-    // //         }
-    // //     }
-    // // });
-
-    // // //When you click player 2's choice
-    // // $(".player-2-choice").on("click", function () {
-    // //     //hide the choices
-    // //     $(".player-2-choice").hide();
-    // //     //save the choice
-    // //     player2Choice = $(this).val();
-    // //     console.log(player2Choice);
-    // //     if (player2connected) {
-    // //         if (player1Picked && !player2Picked) {
-    // //             player2Picked = true;
-    // //             if (player2Choice === "paper") {
-    // //                 $("#player-2-img").attr("src", paperImgSrc);
-
-    // //                 database.ref("/player1").set({
-    // //                     player1Choice: player1Choice,
-    // //                     player1ChoiceImgSrc: paperImgSrc
-    // //                 });
-
-    // //                 $("#player-2-choice-text").append(`You picked: ${player2Choice}`);
-    // //             } else if (player2Choice === "rock") {
-    // //                 $("#player-2-img").attr("src", rockImgSrc);
-    // //                 $("#player-2-choice-text").append(`You picked: ${player2Choice}`);
-    // //             } else if (player2Choice === "scissors") {
-    // //                 $("#player-2-img").attr("src", scissorsImgSrc);
-    // //                 $("#player-2-choice-text").append(`You picked: ${player2Choice}`);
-    // //             }
-    // //         } else {
-    // //             alert("You already picked your choice.")
-    // //         }
-    // //     } else {
-    // //         alert("Waiting for another player to connect!");
-    // //     }
-
-    // // })
-
-
-
-
-
 });
