@@ -114,7 +114,7 @@ $(document).ready(function () {
             });
 
             // Need to update HTML that someone disconnected and all data has been reset. Need to enter name and play again
-            $("#result").show().text("Someone got disconnected! Refresh your browser & re-enter your name to play.");
+            $("#result").show().text("Someone got disconnected! You might need to refresh your browser to re-enter your name to play.");
             $("#player-1-name").text("Player 1");
             $("#player-2-name").text("Player 2");
             $("#player-1-choose-text, #player-2-choose-text").text("Choose one:");
@@ -336,6 +336,7 @@ $(document).ready(function () {
                     $("#player-1-img, #player-2-img").show();
                     $("#player-1-img").attr("src", state.player1.img);
                     $("#player-2-img").attr("src", state.player2.img);
+                    $("#player-1-choose-text, #player-2-choose-text").text("The results are in!");
                     $("#player-1-stats").text(`Wins: ${state.player1.wins} | Losses: ${state.player1.losses} | Ties: ${state.ties}`);
                     $("#player-2-stats").text(`Wins: ${state.player2.wins} | Losses: ${state.player2.losses} | Ties: ${state.ties}`);
 
@@ -377,6 +378,7 @@ $(document).ready(function () {
                     $("#player-1-img, #player-2-img").show();
                     $("#player-1-img").attr("src", state.player1.img);
                     $("#player-2-img").attr("src", state.player2.img);
+                    $("#player-1-choose-text, #player-2-choose-text").text("The results are in!");
                     $("#player-1-stats").text(`Wins: ${state.player1.wins} | Losses: ${state.player1.losses} | Ties: ${state.ties}`);
                     $("#player-2-stats").text(`Wins: ${state.player2.wins} | Losses: ${state.player2.losses} | Ties: ${state.ties}`);
 
@@ -419,6 +421,7 @@ $(document).ready(function () {
                     $("#player-1-img, #player-2-img").show();
                     $("#player-1-img").attr("src", state.player1.img);
                     $("#player-2-img").attr("src", state.player2.img);
+                    $("#player-1-choose-text, #player-2-choose-text").text("The results are in!");
                     $("#player-1-stats").text(`Wins: ${state.player1.wins} | Losses: ${state.player1.losses} | Ties: ${state.ties}`);
                     $("#player-2-stats").text(`Wins: ${state.player2.wins} | Losses: ${state.player2.losses} | Ties: ${state.ties}`);
 
