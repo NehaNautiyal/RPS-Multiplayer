@@ -57,6 +57,7 @@ $(document).ready(function () {
     var connectionsRef = database.ref("/connections");
     var usersRef = database.ref("/users");
     var stateRef = database.ref("/state");
+    var chatRef = database.ref("/chat");
 
     // '.info/connected' is a special location provided by Firebase that is updated
     // every time the client's connection state changes.
@@ -91,7 +92,11 @@ $(document).ready(function () {
 
     // When first loaded, create a stateRef in firebase that will update as a second player joins, or if one player logs out of the window!
     database.ref().on("value", function (snap) {
-        if (snap.numChildren() === 1) {
+        // console.log(`Snap.numChildren(): ${snap.numChildren()}`);
+        // var nodes = snap.val().users;
+        // console.log(`Nodes: ${JSON.stringify(nodes)}`);
+        // console.log(`Nodes.users.numChildren(): ${nodes.numChildren()}`);
+        if (snap.numChildren() === 3) {
             stateRef.update({
                 player1: {
                     id: "",
@@ -115,11 +120,15 @@ $(document).ready(function () {
                 playing: false
             });
 
+            player2connected = false;
+
             // Need to update HTML that someone disconnected and all data has been reset. Need to enter name and play again
             $("#result").show().text("Someone got disconnected! You might need to refresh your browser to re-enter your name to play.");
             $("#player-1-name").text('Type name & Click "Join Game"');
             $("#player-2-name").text('Type name & Click "Join Game"');
             $("#player-1-choose-text, #player-2-choose-text").text("Choose one:");
+        } else if (snap.numChildren() > 2) {
+            $("#viewers").text(`There are ${snap.numChildren() - 2} viewers in the audience.`);
         }
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
@@ -144,6 +153,7 @@ $(document).ready(function () {
                 losses: 0,
                 ties: 0
             });
+            // state.player1.name = name;
         } else if (!state.playing && !state.player2.name && userId !== state.player1.id) {
             usersRef.child(userId).update({
                 id: "",
@@ -155,6 +165,7 @@ $(document).ready(function () {
                 losses: 0,
                 ties: 0
             });
+            // state.player2.name = name;
         }
         $("#player-name-input").val("");
     });
@@ -224,31 +235,10 @@ $(document).ready(function () {
             state.player2.losses = player2.losses;
             console.log(`Player 2 name in local state ${state.player2.name}`);
         }
-
-        // else if (!state.player1.name && state.player2.name) {
-        //     var player1 = s.val();
-        //     stateRef.update({
-        //         player1: {
-        //             id: s.key,
-        //             name: player1.name,
-        //             choice: "",
-        //             turn: true,
-        //             wins: player1.wins,
-        //             losses: player1.losses
-        //         },
-
-        //         ties: 0,
-        //         playing: true
-        //     });
-        // }
     });
 
-
-
     stateRef.on("value", function (snap) {
-
         stateFb = snap.val();
-
         if (!stateFb.playing) {
             if (stateFb.player1.name && !stateFb.player2.name) {
                 $("#player-1-connection").text("Connected!").css("color", "yellowgreen");
@@ -419,39 +409,36 @@ $(document).ready(function () {
         }
     });
 
-    //get rid of numbers 
-    //build object
-    //only defined user can see it's own update
-    //store somewhere in a global variable whatever name you typed in, that name will become key in object and can only see those nodes attached to that node
-    //ignore that names could be the same
-    //other side will be blank
-    //bracket notation is key
+    var messageField;
 
-
-    // } else if (snap.numChildren() > 2) {
-    //     $("#player-1-connection, #player-2-connection").text("Connected!").css("color", "green");
-    //     player1connected = true;
-    //     player2connected = true;
-    //     $("#viewers").text(`There are ${snap.numChildren()} viewers in the audience.`);
-
-
-
-    function sendChatMessage() {
-        ref = firebase.database().ref("/chat");
-        messageField = document.querySelector("#chat-message");
-
-        ref.push().set({
-            name: displayName,
-            message: messageField.value
-        });
-    }
-
-    ref = firebase.database().ref("/chat");
-
-    ref.on("child_added", function (snapshot) {
+    chatRef.on("child_added", function (snapshot) {
         var message = snapshot.val();
-        addChatMessage(message.name, message.message);
+        console.log(`Message: ${JSON.stringify(message)}`);
+        $("#chat-window").prepend(`${message.name}: ${message.message}`);
+        $("#chat-window").prepend('<br>');
     });
+
+    $("#chat-submit").on("click", function () {
+        messageField = $("#chat-message").val().trim();
+        if (userId === state.player1.id) {
+            chatRef.push().set({
+                message: messageField,
+                name: state.player1.name
+
+            });
+        } else if (userId === state.player2.id) {
+            chatRef.push().set({
+                message: messageField,
+                name: state.player2.name
+            });
+        } else {
+            chatRef.push().set({
+                message: messageField,
+                name: "Guest"
+            });
+        }
+    });
+
 
     //Function to reset 
     function reset() {
@@ -526,7 +513,6 @@ $(document).ready(function () {
                     //get the value of that choice & the src of that img
                     player1Choice = $(this).val();
                     player1ChoiceImgSrc = $(this).attr("data-src");
-                    console.log(`Player 1 Choice: ${player1Choice} & imgSrc: ${player1ChoiceImgSrc}`);
 
                     // Update the database
                     stateRef.update({
@@ -548,7 +534,7 @@ $(document).ready(function () {
                             wins: state.player2.wins,
                             losses: state.player2.losses
                         },
-                        ties: 0,
+                        ties: state.ties,
                         playing: true
                     });
 
@@ -599,7 +585,7 @@ $(document).ready(function () {
                         wins: state.player2.wins,
                         losses: state.player2.losses
                     },
-                    ties: 0,
+                    ties: state.ties,
                     playing: true
                 });
 
