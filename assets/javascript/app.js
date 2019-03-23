@@ -87,16 +87,40 @@ $(document).ready(function () {
             // Remove user from the connection list when they disconnect, along with all of their data
             connectionsRef.onDisconnect().remove();
             usersRef.onDisconnect().remove();
+            stateRef.onDisconnect().update({
+                player1: {
+                    id: "",
+                    name: "",
+                    choice: "",
+                    img: "",
+                    turn: false,
+                    wins: 0,
+                    losses: 0
+                },
+                player2: {
+                    id: "",
+                    name: "",
+                    choice: "",
+                    img: "",
+                    turn: false,
+                    wins: 0,
+                    losses: 0
+                },
+                ties: 0,
+                playing: false
+            });
         }
     });
 
     // When first loaded, create a stateRef in firebase that will update as a second player joins, or if one player logs out of the window!
-    database.ref().on("value", function (snap) {
+    database.ref().on("child_changed", function (snap) {
+        console.log(snap.numChildren());
+        console.log(usersRef.exist());
         // console.log(`Snap.numChildren(): ${snap.numChildren()}`);
         // var nodes = snap.val().users;
         // console.log(`Nodes: ${JSON.stringify(nodes)}`);
         // console.log(`Nodes.users.numChildren(): ${nodes.numChildren()}`);
-        if (snap.numChildren() === 3) {
+        if (snap.numChildren() === 2) {
             stateRef.update({
                 player1: {
                     id: "",
@@ -127,12 +151,15 @@ $(document).ready(function () {
             $("#player-1-name").text('Type name & Click "Join Game"');
             $("#player-2-name").text('Type name & Click "Join Game"');
             $("#player-1-choose-text, #player-2-choose-text").text("Choose one:");
-        } else if (snap.numChildren() > 2) {
-            $("#viewers").text(`There are ${snap.numChildren() - 2} viewers in the audience.`);
         }
+
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
+
+    // if (snap.numChildren() > 2) {
+    //     $("#viewers").text(`There are ${snap.numChildren()} viewers in the audience.`);
+    // }
 
     // When a name is typed and "Join Game" is clicked
     $("#player-join-game").on("click", function (e) {
@@ -153,7 +180,6 @@ $(document).ready(function () {
                 losses: 0,
                 ties: 0
             });
-            // state.player1.name = name;
         } else if (!state.playing && !state.player2.name && userId !== state.player1.id) {
             usersRef.child(userId).update({
                 id: "",
@@ -165,7 +191,6 @@ $(document).ready(function () {
                 losses: 0,
                 ties: 0
             });
-            // state.player2.name = name;
         }
         $("#player-name-input").val("");
     });
@@ -239,8 +264,14 @@ $(document).ready(function () {
 
     stateRef.on("value", function (snap) {
         stateFb = snap.val();
+        console.log(stateFb);
         if (!stateFb.playing) {
-            if (stateFb.player1.name && !stateFb.player2.name) {
+            if (!stateFb.player1.name && !stateFb.player2.name) {
+                $("#result").show().text("Someone got disconnected! You might need to refresh your browser to re-enter your name to play.");
+                $("#player-1-name").text('Type name & Click "Join Game"');
+                $("#player-2-name").text('Type name & Click "Join Game"');
+                $("#player-1-choose-text, #player-2-choose-text").text("Choose one:");
+            } else if (stateFb.player1.name && !stateFb.player2.name) {
                 $("#player-1-connection").text("Connected!").css("color", "yellowgreen");
                 $("#player-2-connection").text("Waiting for another player...").css("color", "red");
                 player1connected = true;
@@ -413,7 +444,6 @@ $(document).ready(function () {
 
     chatRef.on("child_added", function (snapshot) {
         var message = snapshot.val();
-        console.log(`Message: ${JSON.stringify(message)}`);
         $("#chat-window").prepend(`${message.name}: ${message.message}`);
         $("#chat-window").prepend('<br>');
     });

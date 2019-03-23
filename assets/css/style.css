@@ -61,7 +61,7 @@ button {
     color: purple;
 }
 
-#chat-message, #chat-submit {
+#chat-message, #chat-submit, #player-join-game, #player-name-input {
     border: 3px solid teal;
 }
 
