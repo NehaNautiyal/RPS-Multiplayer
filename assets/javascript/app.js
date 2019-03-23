@@ -383,7 +383,7 @@ $(document).ready(function () {
                     });
 
                     // Update HTML
-                    $("#result").show().html('<h2>Player 1 wins!</h2>');
+                    $("#result").show().html(`<h2>${state.player1.name} wins!</h2>`);
                     $("#player-1-img, #player-2-img").show();
                     $("#player-1-img").attr("src", state.player1.img);
                     $("#player-2-img").attr("src", state.player2.img);
@@ -426,7 +426,7 @@ $(document).ready(function () {
                     });
 
                     // Update HTML
-                    $("#result").show().html('<h2>Player 2 wins!</h2>');
+                    $("#result").show().html(`<h2>${state.player2.name} wins!</h2>`);
                     $("#player-1-img, #player-2-img").show();
                     $("#player-1-img").attr("src", state.player1.img);
                     $("#player-2-img").attr("src", state.player2.img);
