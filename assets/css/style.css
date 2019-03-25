@@ -68,12 +68,15 @@ button {
 #chat-window {
     background: purple;
     color: whitesmoke;
-    width: 60%;
+    width: 50%;
     border: 5px solid teal;
-    display: flex;
-    justify-content: center;
+    display: block;
+    text-align: left;
+    font-size: 1.15em;
     margin-left: auto;
     margin-right: auto;
+    height: 40vh;
+    overflow: scroll;
 }
 
 #chat-submit-row {
@@ -83,7 +86,7 @@ flex-wrap: wrap;
 }
 
 #chat-message {
-    width: 35vw;
+    width: 30vw;
 }
 
 .chat {

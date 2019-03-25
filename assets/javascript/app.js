@@ -267,10 +267,11 @@ $(document).ready(function () {
         console.log(stateFb);
         if (!stateFb.playing) {
             if (!stateFb.player1.name && !stateFb.player2.name) {
-                $("#result").show().text("Someone got disconnected! You might need to refresh your browser to re-enter your name to play.");
+                // $("#result").show().text("Someone got disconnected! You might need to refresh your browser to re-enter your name to play.");
                 $("#player-1-name").text('Type name & Click "Join Game"');
                 $("#player-2-name").text('Type name & Click "Join Game"');
                 $("#player-1-choose-text, #player-2-choose-text").text("Choose one:");
+                $("#player-1-connection").text("Not connected").css("color", "white");
             } else if (stateFb.player1.name && !stateFb.player2.name) {
                 $("#player-1-connection").text("Connected!").css("color", "yellowgreen");
                 $("#player-2-connection").text("Waiting for another player...").css("color", "red");
