@@ -226,11 +226,9 @@ $(document).ready(function () {
             state.player1.turn = true;
             state.player1.wins = player1.wins;
             state.player1.losses = player1.losses;
-            console.log(`Player 1 name in local state ${state.player1.name}`);
 
         } else if (state.player1.name && !state.player2.name) {
             var player2 = s.val();
-            console.log("player2" + player2);
             stateRef.update({
                 player1: {
                     id: state.player1.id,
@@ -258,7 +256,6 @@ $(document).ready(function () {
             state.player1.turn = true;
             state.player2.wins = player2.wins;
             state.player2.losses = player2.losses;
-            console.log(`Player 2 name in local state ${state.player2.name}`);
         }
     });
 
@@ -267,7 +264,6 @@ $(document).ready(function () {
         console.log(stateFb);
         if (!stateFb.playing) {
             if (!stateFb.player1.name && !stateFb.player2.name) {
-                // $("#result").show().text("Someone got disconnected! You might need to refresh your browser to re-enter your name to play.");
                 $("#player-1-name").text('Type name & Click "Join Game"');
                 $("#player-2-name").text('Type name & Click "Join Game"');
                 $("#player-1-choose-text, #player-2-choose-text").text("Choose one:");
